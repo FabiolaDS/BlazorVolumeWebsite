@@ -1,0 +1,38 @@
+﻿@page "/resultList"
+@using VolumeWeb.Service
+@inject CalculatorService _service
+<h3>ResultList</h3>
+ @if (_results == null)
+ {
+     <p> loading ...</p>
+ }
+
+ else
+ {
+     <table>
+         <tbody>
+         @foreach (var result in _results)
+         {
+             <tr>
+                 <td>@result.Type</td>
+                 
+                 <td>@result.Height </td>
+                 <td>@result.Radius </td>
+                 <td>@result.Volume </td>
+             </tr>
+         }
+         
+         </tbody>
+     </table>
+ }
+@code {
+
+    private List<VolumeResult> _results;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _results = await _service.GetAllAsync();
+        StateHasChanged();
+    }
+
+}

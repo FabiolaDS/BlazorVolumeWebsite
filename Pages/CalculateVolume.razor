@@ -1,0 +1,49 @@
+﻿@page "/calculateVolume"
+@using VolumeWeb.Service
+
+@inject CalculatorService _calculatorService
+<h3>CalculateVolume</h3>
+
+<EditForm OnSubmit="Submit" Model="@_volumeRequest">
+    <InputSelect @bind-Value="_volumeRequest.Type">
+        <option value="0">
+            cone
+        </option>
+        <option value="1">
+            cylinder
+        </option>
+    </InputSelect>
+    height :<InputNumber @bind-Value="_volumeRequest.Height"/>
+    radius: <InputNumber @bind-Value="_volumeRequest.Radius"/>
+    
+    <input type="submit"/>
+</EditForm>
+
+@if (_volumeResult != null)
+{
+    <p> @_volumeResult.Volume</p>
+}
+    
+
+
+
+
+
+@code {
+    private VolumeRequest _volumeRequest= new VolumeRequest();
+    private VolumeResult _volumeResult;
+
+    private  async Task Submit()
+    {
+        if (_volumeRequest.Type == 0)
+        {
+          _volumeResult= await _calculatorService.CalculateVolumeConeAsync(_volumeRequest.Height, _volumeRequest.Radius);
+        }
+        else if (_volumeRequest.Type==1)
+        {
+           _volumeResult= await _calculatorService.CalculateVolumeCylinderAsync(_volumeRequest.Height, _volumeRequest.Radius);
+        }
+      
+    }
+
+}
